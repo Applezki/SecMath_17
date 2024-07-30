@@ -1,0 +1,426 @@
+---
+title: "R for Data Science"
+author: "Rochelle Salazar"
+format: html
+editor: visual
+---
+
+# Introduction
+
+## What will you learn
+
+Review the pipeline because sir will include it in the exam
+
+![](tidyverse.png)
+
+# The Tidyverse
+
+To install the tidyverse package use the code:
+
+`install.packages("tidyverse")`
+
+`install.packages("tidyverse")`
+
+```{r}
+#|label: load-tidyverse
+
+library(tidyverse)
+```
+
+```         
+── Attaching core tidyverse packages ─────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.3.9000     ✔ purrr     1.0.2     
+✔ forcats   1.0.0          ✔ stringr   1.5.0     
+✔ ggplot2   3.4.4          ✔ tibble    3.2.1     
+✔ lubridate 1.9.3          ✔ tidyr     1.3.0     ── Conflicts ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors     
+```
+
+we also installed other packages by typing in the console the following code:
+
+`install.packages(c("arrow", "babynames", "curl","duckdb","gapminder" "ggrepel", "ggridges", "ggthemes", "hexbin", "janitor", "Lahman","leaflet", "maps", "nycflights13", "openxlsx", "palmerpenguins","repurrrsive", "tidymodels", "writexl"))`
+
+# data visualization
+
+## introduction
+
+::: callout-note
+## reminder
+
+first load the `tidyverse` package.
+:::
+
+```{r}
+#|label: load-packages
+
+library(palmerpenguins)
+library(ggthemes)
+```
+
+## first steps
+
+```{r}
+penguins
+```
+
+```{r}
+glimpse(penguins)
+```
+
+```         
+Rows: 344
+Columns: 8
+$ species           <fct> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adelie,…
+$ island            <fct> Torgersen, Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    <dbl> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8,…
+$ bill_depth_mm     <dbl> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, 20.2, 17.1,…
+$ flipper_length_mm <int> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186, 180, 182,…
+$ body_mass_g       <int> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, 4250, 3300,…
+$ sex               <fct> male, female, female, NA, female, male, female, male, NA, NA, N…
+$ year              <int> 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 200…
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+
+
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(mapping = aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"
+  ) +
+  scale_color_colorblind()
+  
+```
+
+```         
+```
+
+![](bm.png)
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = island)
+) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point()
+```
+
+```{r}
+ggplot(penguins, aes(x = species)) +
+  geom_bar(color = "red")
+
+ggplot(penguins, aes(x = species)) +
+  geom_bar(fill = "red")
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Body mass and flipper length",
+    
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "island", shape = "island"
+  ) +
+  scale_color_colorblind()
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") 
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"
+  ) +
+  scale_color_colorblind()
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(mapping = aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(mapping = aes(color = species, shape = bill_depth_mm)) +
+  geom_smooth(method = "lm")
+  
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(mapping = aes(color = bill_depth_mm, shape = bill_depth_mm)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = island)
+) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) + scale_shape_binned(species = bill_depth_mm)
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(color = blue) +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(color = species) +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm")
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() + p labs(color = bill_depth_mm)
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  )
+```
+
+```{r}
+p <- ggplot(mtcars, aes(mpg, wt, colour = cyl)) + geom_point()
+p + labs(colour = "Cylinders")
+
+p + labs(x = "New x label")
+
+
+# The plot title appears at the top-left, with the subtitle
+# display in smaller text underneath it
+p + labs(title = "New plot title")
+
+p + labs(title = "New plot title", subtitle = "A subtitle")
+
+
+# The caption appears in the bottom-right, and is often used for
+# sources, notes or copyright
+p + labs(caption = "(based on data from ...)")
+
+
+# The plot tag appears at the top-left, and is typically used
+# for labelling a subplot with a letter.
+p + labs(title = "title", tag = "A")
+
+
+# If you want to remove a label, set it to NULL.
+p +
+ labs(title = "title") +
+ labs(title = NULL)
+
+
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"
+  ) +
+  scale_color_colorblind() +
+  labs(color = "bill depth mm")
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)
+) +
+  geom_point(aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"
+  ) +
+  scale_color_colorblind()
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#| message: false
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)
+  ) +
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g, color = bill_depth_mm)
+  )
+```
